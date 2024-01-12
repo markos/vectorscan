@@ -57,8 +57,8 @@ if (BUILD_CHIMERA)
         engine_pcre.h
     )
     add_executable(hsbench ${hsbench_SOURCES})
-    include_directories(${PCRE_INCLUDE_DIRS})
-    target_link_libraries(hsbench hs chimera ${PCRE_LDFLAGS} databaseutil
+    include_directories(${PCRE2_INCLUDE_DIRS})
+    target_link_libraries(hsbench hs chimera ${PCRE2_LDFLAGS} databaseutil
         expressionutil ${SQLITE3_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT})
 else()
     add_executable(hsbench ${hsbench_SOURCES})

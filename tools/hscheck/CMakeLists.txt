@@ -7,10 +7,10 @@ SET(hscheck_SOURCES
 )
 
 if (BUILD_CHIMERA)
-    include_directories(${PCRE_INCLUDE_DIRS})
+    include_directories(${PCRE2_INCLUDE_DIRS})
     add_definitions(-DHS_HYBRID)
     add_executable(hscheck ${hscheck_SOURCES})
-    target_link_libraries(hscheck hs chimera ${PCRE_LDFLAGS} expressionutil pthread)
+    target_link_libraries(hscheck hs chimera ${PCRE2_LDFLAGS} expressionutil pthread)
 else()
     add_executable(hscheck ${hscheck_SOURCES})
     target_link_libraries(hscheck hs expressionutil pthread)

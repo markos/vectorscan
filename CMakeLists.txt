@@ -199,18 +199,18 @@ include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${ARCH_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ARCH_CXX_FLAGS}")
 
-# PCRE check, we have a fixed requirement for PCRE to use Chimera
+# PCRE2 check, we have a fixed requirement for PCRE2 to use Chimera
 # and hscollider
-set(PCRE_REQUIRED_MAJOR_VERSION 8)
-set(PCRE_REQUIRED_MINOR_VERSION 41)
-set(PCRE_REQUIRED_VERSION ${PCRE_REQUIRED_MAJOR_VERSION}.${PCRE_REQUIRED_MINOR_VERSION})
-include (${CMAKE_MODULE_PATH}/pcre.cmake)
-if (NOT CORRECT_PCRE_VERSION)
-    message(STATUS "PCRE ${PCRE_REQUIRED_VERSION} or above not found")
+set(PCRE2_REQUIRED_MAJOR_VERSION 8)
+set(PCRE2_REQUIRED_MINOR_VERSION 41)
+set(PCRE2_REQUIRED_VERSION ${PCRE2_REQUIRED_MAJOR_VERSION}.${PCRE2_REQUIRED_MINOR_VERSION})
+include (${CMAKE_MODULE_PATH}/pcre2.cmake)
+if (NOT CORRECT_PCRE2_VERSION)
+    message(STATUS "PCRE ${PCRE2_REQUIRED_VERSION} or above not found")
 endif()
 
 # we need static libs for Chimera - too much deep magic for shared libs
-if (CORRECT_PCRE_VERSION AND PCRE_BUILD_SOURCE AND BUILD_STATIC_LIBS)
+if (CORRECT_PCRE2_VERSION AND PCRE2_BUILD_SOURCE AND BUILD_STATIC_LIBS)
     set(BUILD_CHIMERA TRUE)
 endif()
 

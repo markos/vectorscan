@@ -1,9 +1,9 @@
-if (NOT CORRECT_PCRE_VERSION)
-    message(STATUS "PCRE ${PCRE_REQUIRED_VERSION} not found, not building hscollider")
+if (NOT CORRECT_PCRE2_VERSION)
+    message(STATUS "PCRE2 ${PCRE2_REQUIRED_VERSION} not found, not building hscollider")
     return()
 endif()
 
-include_directories(${PCRE_INCLUDE_DIRS})
+include_directories(${PCRE2_INCLUDE_DIRS})
 
 include(${CMAKE_MODULE_PATH}/backtrace.cmake)
 
@@ -66,11 +66,11 @@ add_executable(hscollider ${hscollider_SOURCES})
 add_dependencies(hscollider ragel_ColliderCorporaParser)
 
 if (BUILD_CHIMERA)
-    target_link_libraries(hscollider hs chimera ${PCRE_LDFLAGS} databaseutil
+    target_link_libraries(hscollider hs chimera ${PCRE2_LDFLAGS} databaseutil
         expressionutil corpusomatic crosscompileutil pthread
     "${BACKTRACE_LDFLAGS}")
 else()
-    target_link_libraries(hscollider hs ${PCRE_LDFLAGS} databaseutil
+    target_link_libraries(hscollider hs ${PCRE2_LDFLAGS} databaseutil
         expressionutil corpusomatic crosscompileutil pthread
     "${BACKTRACE_LDFLAGS}")
 endif()
