@@ -31,7 +31,7 @@
 #include "hs.h"
 
 #include <assert.h>
-#include <pcre.h> /* for pcre flags */
+#include <pcre2.h>      /* for pcre flags */
 
 bool getPcreFlags(unsigned int hs_flags, unsigned int *flags,
                   bool *highlander, bool *prefilter, bool *som,
@@ -46,23 +46,23 @@ bool getPcreFlags(unsigned int hs_flags, unsigned int *flags,
     *som = false;
 
     if (hs_flags & HS_FLAG_CASELESS) {
-        *flags |= PCRE_CASELESS;
+        *flags |= PCRE2_CASELESS;
         hs_flags &= ~HS_FLAG_CASELESS;
     }
     if (hs_flags & HS_FLAG_DOTALL) {
-        *flags |= PCRE_DOTALL;
+        *flags |= PCRE2_DOTALL;
         hs_flags &= ~HS_FLAG_DOTALL;
     }
     if (hs_flags & HS_FLAG_MULTILINE) {
-        *flags |= PCRE_MULTILINE;
+        *flags |= PCRE2_MULTILINE;
         hs_flags &= ~HS_FLAG_MULTILINE;
     }
     if (hs_flags & HS_FLAG_UCP) {
-        *flags |= PCRE_UCP;
+        *flags |= PCRE2_UCP;
         hs_flags &= ~HS_FLAG_UCP;
     }
     if (hs_flags & HS_FLAG_UTF8) {
-        *flags |= PCRE_UTF8;
+        *flags |= PCRE2_UTF;
         hs_flags &= ~HS_FLAG_UTF8;
     }
     if (hs_flags & HS_FLAG_SINGLEMATCH) {
