@@ -66,7 +66,6 @@ public:
 
     static depth unreachable() {
         depth d;
-        d.val = val_unreachable;
         return d;
     }
 
