@@ -179,7 +179,7 @@ public:
         }
 
         s64a rv = val + d;
-        if (rv < 0 || (u64a)rv >= val_infinity) {
+        if ((u64a)rv >= val_infinity) {
             DEBUG_PRINTF("depth %lld too large to represent!\n", rv);
             throw DepthOverflowError();
         }
@@ -202,7 +202,7 @@ public:
         }
 
         s64a rv = val - d;
-        if (rv < 0 || (u64a)rv >= val_infinity) {
+        if ((u64a)rv >= val_infinity) {
             DEBUG_PRINTF("depth %lld too large to represent!\n", rv);
             throw DepthOverflowError();
         }
