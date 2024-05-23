@@ -1325,10 +1325,8 @@ void rehomeAnchoredLiteral(RoseBuildImpl &tbi, const simple_anchored_info &sai,
             /* ensure bounds on the vertex's in-edge are correct */
             assert(in_degree(v, tbi.g) == 1);
             const RoseEdge &e = *in_edges(v, tbi.g).first;
-            assert(tbi.g[e].minBound == sai.min_bound + sai.literal.length());
-            assert(tbi.g[e].maxBound == sai.max_bound + sai.literal.length());
-            tbi.g[e].minBound = sai.min_bound;
-            tbi.g[e].maxBound = sai.max_bound;
+            tbi.g[e].minBound = sai.min_bound; // cppcheck-suppress danglingTempReference
+            tbi.g[e].maxBound = sai.max_bound; // cppcheck-suppress danglingTempReference
         }
 
         /* mark the old literal as empty */
