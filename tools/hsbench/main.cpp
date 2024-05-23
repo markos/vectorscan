@@ -759,11 +759,9 @@ void displayResults(const vector<unique_ptr<ThreadContext>> &threads,
 
     // Sanity check: all of our results should have the same match count.
     for (const auto &t : threads) {
-        // cppcheck-suppress useStlAlgorithm
-        if (!all_of(begin(t->results), end(t->results),
-                    [&matchesPerRun](const ResultEntry &e) {
+        if (!all_of(begin(t->results), end(t->results), [&matchesPerRun](const ResultEntry &e) {
                         return e.matches == matchesPerRun;
-                    })) {
+                    })) { // cppcheck-suppress useStlAlgorithm
             printf("\nWARNING: PER-SCAN MATCH COUNTS ARE INCONSISTENT!\n\n");
             break;
         }
@@ -816,11 +814,9 @@ void displayCsvResults(const vector<unique_ptr<ThreadContext>> &threads,
 
     // Sanity check: all of our results should have the same match count.
     for (const auto &t : threads) {
-        // cppcheck-suppress useStlAlgorithm
-        if (!all_of(begin(t->results), end(t->results),
-                    [&matchesPerRun](const ResultEntry &e) {
+        if (!all_of(begin(t->results), end(t->results), [&matchesPerRun](const ResultEntry &e) {
                         return e.matches == matchesPerRun;
-                    })) {
+                    })) { // cppcheck-suppress useStlAlgorithm
             printf("\nWARNING: PER-SCAN MATCH COUNTS ARE INCONSISTENT!\n\n");
             break;
         }
@@ -871,11 +867,9 @@ void sqlResults(const vector<unique_ptr<ThreadContext>> &threads,
 
     // Sanity check: all of our results should have the same match count.
     for (const auto &t : threads) {
-        // cppcheck-suppress useStlAlgorithm
-        if (!all_of(begin(t->results), end(t->results),
-                    [&matchesPerRun](const ResultEntry &e) {
+        if (!all_of(begin(t->results), end(t->results), [&matchesPerRun](const ResultEntry &e) {
                         return e.matches == matchesPerRun;
-                    })) {
+                    })) { // cppcheck-suppress useStlAlgorithm
             printf("\nWARNING: PER-SCAN MATCH COUNTS ARE INCONSISTENT!\n\n");
             break;
         }

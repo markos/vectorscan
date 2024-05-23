@@ -2457,6 +2457,7 @@ bool hasEodAnchors(const RoseBuildImpl &build, const build_context &bc,
     }
 
     const RoseGraph &g = build.g;
+    // cppcheck-suppress useStlAlgorithm
     for (auto v : vertices_range(g)) {
         if (g[v].eod_accept) {
             DEBUG_PRINTF("literally report eod\n");
