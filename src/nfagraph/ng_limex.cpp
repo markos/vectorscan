@@ -392,8 +392,8 @@ void reusePredsAsStarts(const NGHolder &g, const map<u32, CharReach> &top_reach,
     auto cands = [&g=g](const NFAVertex &u) {
         return (hasSelfLoop(u, g));
     };
-    const auto &u = unhandled_succ_tops | map_keys;
-    std::copy_if(begin(u), end(u),  std::back_inserter(cand_starts), cands);
+    const auto &ust = unhandled_succ_tops | map_keys;
+    std::copy_if(begin(ust), end(ust),  std::back_inserter(cand_starts), cands);
 
     for (NFAVertex u : cand_starts) {
         if (!contains(unhandled_succ_tops, u)) {
