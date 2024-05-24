@@ -7,3 +7,4 @@ assertWithSideEffect
 syntaxError
 internalError
 checkersReport
+missingIncludeSystem
