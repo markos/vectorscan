@@ -7,4 +7,6 @@ assertWithSideEffect
 syntaxError
 internalError
 checkersReport
+missingInclude
 missingIncludeSystem
+unmatchedSuppression
