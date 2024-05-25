@@ -1868,6 +1868,7 @@ void dumpComponentInfoCsv(const RoseEngine *t, const string &base) {
             }
         }
 
+	// cppcheck-suppress invalidPrintfArgType_sint
         fprintf(f, "%u,%zd,\"%s\",%u,%u,%u,%s,%s\n", i,
                 (reinterpret_cast<const char *>(n) - reinterpret_cast<const char *>(t)), describe(*n).c_str(),
                 n->nPositions, n->streamStateSize, n->length,

@@ -143,7 +143,7 @@ void dumpTextReverse(const struct NFA *nfa, FILE *f) {
                 isprint(c1) ? c1 : '?', isprint(c2) ? c2 : '?');
     }
 
-    fprintf(f, "offset %hhd\n", nfa->rAccelOffset);
+    fprintf(f, "offset %hhu\n", nfa->rAccelOffset);
 }
 
 } // namespace ue2
