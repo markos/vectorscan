@@ -125,7 +125,7 @@ char PROCESS_ACCEPTS_IMPL_FN(const IMPL_NFA_T *limex, const STATE_T *s,
     const STATE_T accept_mask = *acceptMask;
     STATE_T accepts = AND_STATE(*s, accept_mask);
 
-    printf("sizeof(STATE_T): %ld, sizeof(CHUNK_T): %ld, NUM_STATE_CHUNKS: %ld\n", sizeof(STATE_T), sizeof(CHUNK_T), NUM_STATE_CHUNKS);
+    DEBUG_PRINTF("sizeof(STATE_T): %ld, sizeof(CHUNK_T): %ld, NUM_STATE_CHUNKS: %ld\n", sizeof(STATE_T), sizeof(CHUNK_T), NUM_STATE_CHUNKS);
     // Caller must ensure that we have at least one accept state on.
     assert(ISNONZERO_STATE(accepts));
 
