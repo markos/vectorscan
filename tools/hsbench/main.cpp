@@ -957,6 +957,7 @@ void runBenchmark(const Engine &db,
 
     for (unsigned i = 0; i < numThreads; i++) {
         auto t = makeThreadContext(db, corpus_blocks, i, sync_barrier);
+	// cppcheck-suppress knownConditionTrueFalse
         int core = useAffinity ? (int)threadCores[i] : -1;
         if (!t->start(core)) {
             printf("Unable to start processing thread %u\n", i);

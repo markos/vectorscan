@@ -106,6 +106,7 @@ bool sanityCheckGraph(const NGHolder &g,
             return false;
         }
         u32 s = state_ids.at(v);
+        // cppcheck-suppress knownConditionTrueFalse
         if (s != NO_STATE && !seen_states.insert(s).second) {
             DEBUG_PRINTF("vertex %zu has dupe state %u\n", g[v].index, s);
             return false;

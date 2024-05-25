@@ -2474,6 +2474,7 @@ bool isSane(const NGHolder &h, const map<u32, set<NFAVertex>> &tops,
             return false;
         }
         const u32 i = state_ids.at(v);
+        // cppcheck-suppress knownConditionTrueFalse
         if (i == NO_STATE) {
             continue;
         }
