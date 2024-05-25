@@ -1496,6 +1496,7 @@ void transformSuffixDelay(RoseInGraph &ig, const CompileContext &cc) {
 #ifndef NDEBUG
 static
 bool validateKinds(const RoseInGraph &g) {
+    // cppcheck-suppress useStlAlgorithm
     for (const auto &e : edges_range(g)) {
         if (g[e].graph && g[e].graph->kind != whatRoseIsThis(g, e)) {
             return false;

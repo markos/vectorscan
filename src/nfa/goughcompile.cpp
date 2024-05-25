@@ -595,6 +595,7 @@ void GoughSSAVarNew::generate(vector<gough_ins> *out) const {
 #ifndef NDEBUG
 template<typename C, typename K>
 bool contains_loose(const C &container, const K &key) {
+    // cppcheck-suppress useStlAlgorithm
     for (const auto &elem : container) {
         if (elem == key) {
             return true;
