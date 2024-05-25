@@ -123,7 +123,7 @@ void describeNode(const NFA *n, const mcclellan *m, u16 i, FILE *f) {
 
     if (aux->accel_offset) {
         dumpAccelDot(f, i,
-          &((const gough_accel *)(reinterpret_cast<const char *>(m) + aux->accel_offset))->accel);
+          &(reinterpret_cast<const gough_accel *>(reinterpret_cast<const char *>(m) + aux->accel_offset))->accel);
     }
 
     if (aux->accept_eod) {
@@ -336,7 +336,7 @@ void nfaExecGough16_dumpText(const struct NFA *nfa, FILE *f) {
             m->state_count, m->length);
     fprintf(f, "astart: %hu, fstart: %hu\n", m->start_anchored,
             m->start_floating);
-    fprintf(f, "single accept: %d\n", !!(int)m->flags & MCCLELLAN_FLAG_SINGLE);
+    fprintf(f, "single accept: %d\n", !!((int)m->flags & MCCLELLAN_FLAG_SINGLE));
     fprintf(f, "sherman_limit: %u, sherman_end: %u\n", m->sherman_limit,
             m->sherman_end);
 
