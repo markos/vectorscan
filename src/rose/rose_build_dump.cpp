@@ -1421,6 +1421,7 @@ void dumpProgram(ofstream &os, const RoseEngine *t, const char *pc) {
                 os << "    base_offset " << ri->base_offset << endl;
                 os << "    last_start " << ri->last_start << endl;
                 os << "    fail_jump " << offset + ri->fail_jump << endl;
+		// cppcheck-suppress pointerOutOfBounds
                 dumpMultipathShufti(os, 16, ri->nib_mask, ri->nib_mask + 16,
                                     ri->bucket_select_mask,
                                     ri->data_select_mask,
