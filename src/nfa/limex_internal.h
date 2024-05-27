@@ -122,7 +122,23 @@ struct NFAException##size {                                                 \
 };                                                                          \
                                                                             \
 struct LimExNFA##size {                                                     \
-    u8 reachMap[N_CHARS]; /**< map of char -> entry in reach[] */           \
+    u_##size init;                                                          \
+    u_##size initDS;                                                        \
+    u_##size accept; /**< mask of accept states */                          \
+    u_##size acceptAtEOD; /**< mask of states that accept at EOD */         \
+    u_##size accel; /**< mask of accelerable states */                      \
+    u_##size accelPermute; /**< pshufb permute mask (not GPR) */            \
+    u_##size accelCompare; /**< pshufb compare mask (not GPR) */            \
+    u_##size accel_and_friends; /**< mask of accelerable states + likely
+                                    *  followers */                         \
+    u_##size compressMask; /**< switch off before compress */               \
+    u_##size exceptionMask;                                                 \
+    u_##size repeatCyclicMask; /**< also includes tug states */             \
+    u_##size zombieMask; /**< zombie if in any of the set states */         \
+    m512 exceptionShufMask; /**< exception byte shuffle mask  */            \
+    m512 exceptionBitMask; /**< exception bit mask */                       \
+    m512 exceptionAndMask; /**< exception and mask */                       \
+    u_##size shift[MAX_SHIFT_COUNT];                                        \
     u32 reachSize; /**< number of reach masks */                            \
     u32 accelCount; /**< number of entries in accel table */                \
     u32 accelTableOffset; /* rel. to start of LimExNFA */                   \
@@ -142,25 +158,9 @@ struct LimExNFA##size {                                                     \
     u32 topOffset; /* rel. to start of LimExNFA */                          \
     u32 stateSize; /**< not including extended history */                   \
     u32 flags;                                                              \
-    u_##size init;                                                          \
-    u_##size initDS;                                                        \
-    u_##size accept; /**< mask of accept states */                          \
-    u_##size acceptAtEOD; /**< mask of states that accept at EOD */         \
-    u_##size accel; /**< mask of accelerable states */                      \
-    u_##size accelPermute; /**< pshufb permute mask (not GPR) */            \
-    u_##size accelCompare; /**< pshufb compare mask (not GPR) */            \
-    u_##size accel_and_friends; /**< mask of accelerable states + likely
-                                    *  followers */                         \
-    u_##size compressMask; /**< switch off before compress */               \
-    u_##size exceptionMask;                                                 \
-    u_##size repeatCyclicMask; /**< also includes tug states */             \
-    u_##size zombieMask; /**< zombie if in any of the set states */         \
-    u_##size shift[MAX_SHIFT_COUNT];                                        \
     u32 shiftCount; /**< number of shift masks used */                      \
     u8 shiftAmount[MAX_SHIFT_COUNT]; /**< shift amount for each mask */     \
-    m512 exceptionShufMask; /**< exception byte shuffle mask  */            \
-    m512 exceptionBitMask; /**< exception bit mask */                       \
-    m512 exceptionAndMask; /**< exception and mask */                       \
+    u8 reachMap[N_CHARS]; /**< map of char -> entry in reach[] */           \
 };
 
 CREATE_NFA_LIMEX(32)
