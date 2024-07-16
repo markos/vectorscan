@@ -53,7 +53,7 @@
 #include <string>
 #include <vector>
 
-#include <pcre.h>
+#include <pcre2.h>
 
 /* -X, -Y support
  * as PCRE performance is `non-linear' and these options add a large amount of
@@ -80,7 +80,7 @@ struct CalloutContext {
 }
 
 static
-int pcreCallOut(pcre_callout_block *block) {
+int pcreCallOut(pcre2_callout_block *block) {
     assert(block);
     assert(block->callout_data);
     CalloutContext *ctx = static_cast<CalloutContext *>(block->callout_data);
@@ -125,7 +125,7 @@ bool decodeExprPcre(string &expr, unsigned *flags, bool *highlander,
     }
 
     if (force_utf8) {
-        *flags |= PCRE_UTF8;
+        *flags |= PCRE2_UTF;
     }
 
     if (force_prefilter) {
@@ -138,55 +138,52 @@ bool decodeExprPcre(string &expr, unsigned *flags, bool *highlander,
 static
 string pcreErrStr(int err) {
     switch (err) {
-        case PCRE_ERROR_NOMATCH:
-            return "PCRE_ERROR_NOMATCH";
-        case PCRE_ERROR_NULL:
-            return "PCRE_ERROR_NULL";
-        case PCRE_ERROR_BADOPTION:
-            return "PCRE_ERROR_BADOPTION";
-        case PCRE_ERROR_BADMAGIC:
-            return "PCRE_ERROR_BADMAGIC";
-#if defined(PCRE_ERROR_UNKNOWN_OPCODE)
-        case PCRE_ERROR_UNKNOWN_OPCODE:
-            return "PCRE_ERROR_UNKNOWN_OPCODE";
-#else
-         case PCRE_ERROR_UNKNOWN_NODE:
-             return "PCRE_ERROR_UNKNOWN_NODE";
+        case PCRE2_ERROR_NOMATCH:
+            return "PCRE2_ERROR_NOMATCH";
+        case PCRE2_ERROR_NULL:
+            return "PCRE2_ERROR_NULL";
+        case PCRE2_ERROR_BADOPTION:
+            return "PCRE2_ERROR_BADOPTION";
+        case PCRE2_ERROR_BADMAGIC:
+            return "PCRE2_ERROR_BADMAGIC";
+        case PCRE2_ERROR_UNKNOWN_ESCAPE:
+            return "PCRE2_ERROR_UNKNOWN_ESCAPE";
+        case PCRE2_ERROR_NOMEMORY:
+            return "PCRE2_ERROR_NOMEMORY";
+        case PCRE2_ERROR_NOSUBSTRING:
+            return "PCRE2_ERROR_NOSUBSTRING";
+        case PCRE2_ERROR_MATCHLIMIT:
+            return "PCRE2_ERROR_MATCHLIMIT";
+        case PCRE2_ERROR_CALLOUT:
+            return "PCRE2_ERROR_CALLOUT";
+        case PCRE2_ERROR_BADUTF8:
+            return "PCRE2_ERROR_BADUTF8";
+        case PCRE2_ERROR_BADUTFOFFSET:
+            return "PCRE2_ERROR_BADUTFOFFSET";
+        case PCRE2_ERROR_PARTIAL:
+            return "PCRE2_ERROR_PARTIAL";
+        case PCRE2_ERROR_BADPARTIAL:
+            return "PCRE2_ERROR_BADPARTIAL";
+        case PCRE2_ERROR_INTERNAL:
+            return "PCRE2_ERROR_INTERNAL";
+        case PCRE2_ERROR_BADCOUNT:
+            return "PCRE2_ERROR_BADCOUNT";
+        case PCRE2_ERROR_RECURSELOOP:
+            return "PCRE2_ERROR_RECURSELOOP";
+#if defined(PCRE2_ERROR_RECURSIONLIMIT)
+        case PCRE2_ERROR_RECURSIONLIMIT:
+            return "PCRE2_ERROR_RECURSIONLIMIT";
 #endif
-        case PCRE_ERROR_NOMEMORY:
-            return "PCRE_ERROR_NOMEMORY";
-        case PCRE_ERROR_NOSUBSTRING:
-            return "PCRE_ERROR_NOSUBSTRING";
-        case PCRE_ERROR_MATCHLIMIT:
-            return "PCRE_ERROR_MATCHLIMIT";
-        case PCRE_ERROR_CALLOUT:
-            return "PCRE_ERROR_CALLOUT";
-        case PCRE_ERROR_BADUTF8:
-            return "PCRE_ERROR_BADUTF8";
-        case PCRE_ERROR_BADUTF8_OFFSET:
-            return "PCRE_ERROR_BADUTF8_OFFSET";
-        case PCRE_ERROR_PARTIAL:
-            return "PCRE_ERROR_PARTIAL";
-        case PCRE_ERROR_BADPARTIAL:
-            return "PCRE_ERROR_BADPARTIAL";
-        case PCRE_ERROR_INTERNAL:
-            return "PCRE_ERROR_INTERNAL";
-        case PCRE_ERROR_BADCOUNT:
-            return "PCRE_ERROR_BADCOUNT";
-#if defined(PCRE_ERROR_RECURSIONLIMIT)
-        case PCRE_ERROR_RECURSIONLIMIT:
-            return "PCRE_ERROR_RECURSIONLIMIT";
-#endif
-        case PCRE_ERROR_DFA_UITEM:
-            return "PCRE_ERROR_DFA_UITEM";
-        case PCRE_ERROR_DFA_UCOND:
-            return "PCRE_ERROR_DFA_UCOND";
-        case PCRE_ERROR_DFA_UMLIMIT:
-            return "PCRE_ERROR_DFA_UMLIMIT";
-        case PCRE_ERROR_DFA_WSSIZE:
-            return "PCRE_ERROR_DFA_WSSIZE";
-        case PCRE_ERROR_DFA_RECURSE:
-            return "PCRE_ERROR_DFA_RECURSE";
+        case PCRE2_ERROR_DFA_UITEM:
+            return "PCRE2_ERROR_DFA_UITEM";
+        case PCRE2_ERROR_DFA_UCOND:
+            return "PCRE2_ERROR_DFA_UCOND";
+        case PCRE2_ERROR_DFA_UMLIMIT:
+            return "PCRE2_ERROR_DFA_UMLIMIT";
+        case PCRE2_ERROR_DFA_WSSIZE:
+            return "PCRE2_ERROR_DFA_WSSIZE";
+        case PCRE2_ERROR_DFA_RECURSE:
+            return "PCRE2_ERROR_DFA_RECURSE";
         default:
             {
                 ostringstream oss;
@@ -240,8 +237,8 @@ void addCallout(string &re) {
 static
 bool isUtf8(const CompiledPcre &compiled) {
     unsigned long int options = 0;
-    pcre_fullinfo(compiled.bytecode, NULL, PCRE_INFO_OPTIONS, &options);
-    return options & PCRE_UTF8;
+    pcre_fullinfo(compiled.bytecode, NULL, PCRE2_INFO_ALLOPTIONS, &options);
+    return options & PCRE2_UTF;
 }
 
 unique_ptr<CompiledPcre>
@@ -328,7 +325,7 @@ GroundTruth::compile(unsigned id, bool no_callouts) {
     int errcode = 0;
 
     unique_ptr<CompiledPcre> compiled = std::make_unique<CompiledPcre>();
-    compiled->utf8 = flags & PCRE_UTF8;
+    compiled->utf8 = flags & PCRE2_UTF;
     compiled->highlander = highlander;
     compiled->prefilter = prefilter;
     compiled->som = som;
@@ -338,7 +335,7 @@ GroundTruth::compile(unsigned id, bool no_callouts) {
     compiled->max_offset = ext.max_offset;
     compiled->min_length = ext.min_length;
     compiled->expression = i->second; // original PCRE
-    flags |= PCRE_NO_AUTO_POSSESS;
+    flags |= PCRE2_NO_AUTO_POSSESS;
 
     if (compiled->combination) {
         compiled->pl.parseLogicalCombination(id, re.c_str(), ~0U, 0, ~0ULL);
@@ -348,7 +345,7 @@ GroundTruth::compile(unsigned id, bool no_callouts) {
     }
 
     compiled->bytecode =
-        pcre_compile2(re.c_str(), flags, &errcode, &errptr, &errloc, nullptr);
+        pcre2_compile(re.c_str(), flags, &errcode, &errptr, &errloc, nullptr);
 
     if (!compiled->bytecode || errptr) {
         assert(errcode);
@@ -374,9 +371,9 @@ GroundTruth::compile(unsigned id, bool no_callouts) {
     }
 
     int infoRes =
-        pcre_fullinfo(compiled->bytecode, extra.get(), PCRE_INFO_CAPTURECOUNT,
+        pcre_fullinfo(compiled->bytecode, extra.get(), PCRE2_INFO_CAPTURECOUNT,
                       &compiled->captureCount);
-    if (infoRes < PCRE_ERROR_NOMATCH) {
+    if (infoRes < PCRE2_ERROR_NOMATCH) {
         ostringstream oss;
         oss << "Error determining number of capturing subpatterns ("
             << pcreErrStr(infoRes) << ").";
@@ -434,8 +431,8 @@ int scanBasic(const CompiledPcre &compiled, const string &buffer,
         real_len -= suffix_len - 2;
     }
 
-    int flags = suffix_len ? PCRE_NOTEOL : 0;
-    int ret = pcre_exec(compiled.bytecode, &extra, buffer.c_str(), real_len,
+    int flags = suffix_len ? PCRE2_NOTEOL : 0;
+    int ret = pcre2_match(compiled.bytecode, &extra, buffer.c_str(), real_len,
                         begin_offset, flags, &ovector[0], ovector.size());
 
     if (!g_corpora_prefix.empty()) {
@@ -485,10 +482,10 @@ int scanHybrid(const CompiledPcre &compiled, const string &buffer,
     int flags = 0;
     int ret;
     do {
-        ret = pcre_exec(compiled.bytecode, &extra, buffer.c_str(), len,
+        ret = pcre2_match(compiled.bytecode, &extra, buffer.c_str(), len,
                         startoffset, flags, &ovector[0], ovector.size());
 
-        if (ret <= PCRE_ERROR_NOMATCH) {
+        if (ret <= PCRE2_ERROR_NOMATCH) {
             return ret;
         }
 
@@ -532,11 +529,11 @@ int scanOffset(const CompiledPcre &compiled, const string &buffer,
     const string buf(string(offset, '\0') + buffer);
 
     // First, scan our preamble so that we can discard any matches therein
-    // after the real scan, later. We use PCRE_NOTEOL so that end-anchors in
+    // after the real scan, later. We use PCRE2_NOTEOL so that end-anchors in
     // our expression don't match at the end of the preamble.
-    int ret = pcre_exec(compiled.bytecode, &extra, buf.c_str(), offset, 0,
-                        PCRE_NOTEOL, &ovector[0], ovector.size());
-    if (ret < PCRE_ERROR_NOMATCH) {
+    int ret = pcre2_match(compiled.bytecode, &extra, buf.c_str(), offset, 0,
+                        PCRE2_NOTEOL, &ovector[0], ovector.size());
+    if (ret < PCRE2_ERROR_NOMATCH) {
         return ret;
     }
 
@@ -544,9 +541,9 @@ int scanOffset(const CompiledPcre &compiled, const string &buffer,
     pre_matches.swap(ctx.matches);
 
     // Real scan.
-    ret = pcre_exec(compiled.bytecode, &extra, buf.c_str(), buf.size(), 0, 0,
+    ret = pcre2_match(compiled.bytecode, &extra, buf.c_str(), buf.size(), 0, 0,
                     &ovector[0], ovector.size());
-    if (ret < PCRE_ERROR_NOMATCH) {
+    if (ret < PCRE2_ERROR_NOMATCH) {
         return ret;
     }
 
@@ -702,13 +699,13 @@ bool GroundTruth::run(unsigned, const CompiledPcre &compiled,
     bool usingCallouts = isStandardMode(colliderMode);
     if (usingCallouts) {
         // Switch on callouts.
-        extra.flags |= PCRE_EXTRA_CALLOUT_DATA;
+        extra.flags |= PCRE2_EXTRA_CALLOUT_DATA;
         extra.callout_data = &ctx;
     }
 
     // Set the match_limit (in order to bound execution time on very complex
     // patterns)
-    extra.flags |= (PCRE_EXTRA_MATCH_LIMIT | PCRE_EXTRA_MATCH_LIMIT_RECURSION);
+    extra.flags |= (PCRE2_EXTRA_MATCH_LIMIT | PCRE2_EXTRA_MATCH_LIMIT_RECURSION);
     if (colliderMode == MODE_HYBRID) {
         extra.match_limit = 10000000;
         extra.match_limit_recursion = 1500;
@@ -717,9 +714,9 @@ bool GroundTruth::run(unsigned, const CompiledPcre &compiled,
         extra.match_limit_recursion = matchLimitRecursion;
     }
 
-#ifdef PCRE_NO_START_OPTIMIZE
+#ifdef PCRE2_NO_START_OPTIMIZE
     // Switch off optimizations that may result in callouts not occurring.
-    extra.flags |= PCRE_NO_START_OPTIMIZE;
+    extra.flags |= PCRE2_NO_START_OPTIMIZE;
 #endif
 
     // Ensure there's enough room in the ovector for the capture groups in this
@@ -745,11 +742,11 @@ bool GroundTruth::run(unsigned, const CompiledPcre &compiled,
         break;
     default:
         assert(0);
-        ret = PCRE_ERROR_NULL;
+        ret = PCRE2_ERROR_NULL;
         break;
     }
 
-    if (ret < PCRE_ERROR_NOMATCH) {
+    if (ret < PCRE2_ERROR_NOMATCH) {
         error = pcreErrStr(ret);
         return false;
     }

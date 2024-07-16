@@ -38,7 +38,7 @@
 #include <string>
 #include <vector>
 
-#include <pcre.h>
+#include <pcre2.h>
 
 #include <boost/core/noncopyable.hpp>
 
@@ -77,7 +77,7 @@ public:
     }
 
     std::string expression;
-    pcre *bytecode = nullptr;
+    pcre2_code *bytecode = nullptr;
     unsigned long long min_offset = 0;
     unsigned long long max_offset = ~0ULL;
     unsigned long long min_length = 0;
@@ -103,7 +103,7 @@ private:
     std::mutex bad_mutex; // serialised accesses to bad flag.
 };
 
-// Wrapper around libpcre to generate results for an expression and corpus.
+// Wrapper around libpcre2 to generate results for an expression and corpus.
 class GroundTruth : boost::noncopyable {
 public:
     GroundTruth(std::ostream &os, const ExpressionMap &expr,
